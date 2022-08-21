@@ -1,0 +1,1 @@
+f = open("cities_of_the_world.csv", "r")
