@@ -10,7 +10,6 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     raw_line = f.readline()  # loading first line
     while raw_line != "":
         line = raw_line.replace('","', "|").replace('"', "").split("|")  # cleaning the raw input
-
         pop_temp = line[9]
         if pop_temp == "":
             pop_temp = 0
@@ -25,6 +24,8 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     ten_biggest_cities = population_sorted[0:10]
     for city in ten_biggest_cities:
         print("{}, population: {}".format(city.name, city.population))
+
+         
 
 
 
