@@ -29,7 +29,6 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     print("\n")
     print("\n")
     
-
     countries_sorted = sorted(cities, key=lambda city: city[1])  # list of cities grouped by countries, alphabetical
     curr_country = countries_sorted[0].country
     Country = namedtuple('Country', 'name population city_counter')
@@ -38,7 +37,6 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     city_count = 0
     pop_sum = 0
     
-
     for city in countries_sorted:
         if city.country == curr_country:  # if it's the same country
             city_count += 1
@@ -57,7 +55,6 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     print("\n")
     print("\n")
 
-    
     # finding the ten less populated countries
     pop_sorted_countries = sorted(country_data_lst, key=lambda country: country[1])
     ten_less_pop = []
