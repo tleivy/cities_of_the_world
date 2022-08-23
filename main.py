@@ -93,7 +93,7 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     print("ten most populated cities")
     print("-------------------------")
     for city in ten_biggest_cities:
-        print("{}, population: {}".format(city.name, city.population))
+        print("{}, {} - population: {}".format(city.name, city.country, city.population))
     print("\n")
 
     # finding the ten bottom populated countries
@@ -110,4 +110,4 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     print("ten bottom populated countries")
     print("----------------------------")
     for country in ten_bottom_pop:
-        print("{}, population: {}".format(country.name, country.population))
+        print("{} - population: {}".format(country.name, country.population))
