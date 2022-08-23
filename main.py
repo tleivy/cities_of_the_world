@@ -11,7 +11,6 @@ def format_line_split(raw_line):
 
 def sub_list(lst, start_index, finish_index):
     """
-
     :param lst: origin list
     :param start_index: starting index
     :param finish_index: finish index
@@ -22,7 +21,6 @@ def sub_list(lst, start_index, finish_index):
 
 def population_parse2int(pop_temp):
     """
-
     :param pop_temp: a string representing the population of a city
     :return: population parsed to int
     """
@@ -44,13 +42,12 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     raw_line = f.readline()  # skipping header line
     raw_line = f.readline()  # loading first line
     while raw_line != "":
+
         line = format_line_split(raw_line)  # cleaning the raw input
-
-        # parsing population to int
         pop_int = population_parse2int(line[9])
-
         curr = City(name=line[0], country=line[4], population=pop_int)
         cities.append(curr)
+
         raw_line = f.readline()  # reading the next line of data
 
     # getting 10 most populated cities
