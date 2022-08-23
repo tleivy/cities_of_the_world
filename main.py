@@ -1,27 +1,53 @@
 from collections import namedtuple
 
-# creating namedtuple type - cities
+
+def format_line_split(raw_line):
+    """
+    :param raw_line:
+    :return: a list of the words in the line
+    """
+    return raw_line.replace('","', "|").replace('"', "").split("|")
+
+
+def sub_list(lst, start_index, finish_index):
+    """
+
+    :param lst: origin list
+    :param start_index: starting index
+    :param finish_index: finish index
+    :return: a sub list of the origin list
+    """
+    return lst[start_index:finish_index]
+
+
+# creating namedtuple type - City, Country
 City = namedtuple('City', 'name country population')
+Country = namedtuple('Country', 'name population city_counter')
 cities = []
+country_data_lst = []
+
 
 with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
+
     # reading cities and creating objects
     raw_line = f.readline()  # skipping header line
     raw_line = f.readline()  # loading first line
     while raw_line != "":
-        line = raw_line.replace('","', "|").replace('"', "").split("|")  # cleaning the raw input
+        line = format_line_split(raw_line)  # cleaning the raw input
+
+        # parsing population to int
         pop_temp = line[9]
         if pop_temp == "":
             pop_temp = 0
-        pop_temp = int(float(pop_temp))  # parsing population to int
+        pop_temp = int(float(pop_temp))
 
         curr = City(name=line[0], country=line[4], population=pop_temp)
         cities.append(curr)
-        raw_line = f.readline()
+        raw_line = f.readline()  # reading the next line of data
 
     # getting 10 most populated cities
     population_sorted = sorted(cities, key=lambda city: city[2], reverse=True)
-    ten_biggest_cities = population_sorted[0:10]
+    ten_biggest_cities = sub_list(population_sorted, 0, 10)
     print("ten most populated cities")
     print("-------------------------")
     for city in ten_biggest_cities:
@@ -31,9 +57,7 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     
     countries_sorted = sorted(cities, key=lambda city: city[1])  # list of cities grouped by countries, alphabetical
     curr_country = countries_sorted[0].country
-    Country = namedtuple('Country', 'name population city_counter')
-    country_data_lst = []  # list of country tuples
-    
+
     city_count = 0
     pop_sum = 0
     
@@ -42,7 +66,7 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
             city_count += 1
             pop_sum += city.population
         else:
-            curr = Country(name=curr_country, population=pop_sum, city_counter=city_count)  # create a final country tuple
+            curr = Country(name=curr_country, population=pop_sum, city_counter=city_count)  # create a country tuple
             country_data_lst.append(curr)
             curr_country = city.country  # update current country and initialize
             city_count = 1
