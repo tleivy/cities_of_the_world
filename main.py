@@ -20,6 +20,17 @@ def sub_list(lst, start_index, finish_index):
     return lst[start_index:finish_index]
 
 
+def population_parse2int(pop_temp):
+    """
+
+    :param pop_temp: a string representing the population of a city
+    :return: population parsed to int
+    """
+    if pop_temp == "":
+        pop_temp = -1
+    return int(float(pop_temp))
+
+
 # creating namedtuple type - City, Country
 City = namedtuple('City', 'name country population')
 Country = namedtuple('Country', 'name population city_counter')
@@ -36,12 +47,9 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
         line = format_line_split(raw_line)  # cleaning the raw input
 
         # parsing population to int
-        pop_temp = line[9]
-        if pop_temp == "":
-            pop_temp = 0
-        pop_temp = int(float(pop_temp))
+        pop_int = population_parse2int(line[9])
 
-        curr = City(name=line[0], country=line[4], population=pop_temp)
+        curr = City(name=line[0], country=line[4], population=pop_int)
         cities.append(curr)
         raw_line = f.readline()  # reading the next line of data
 
@@ -62,7 +70,7 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     pop_sum = 0
     
     for city in countries_sorted:
-        if city.country == curr_country:  # if it's the same country
+        if city.country == curr_country:  # if it's still the same country
             city_count += 1
             pop_sum += city.population
         else:
@@ -79,21 +87,18 @@ with open('cities_of_the_world.csv', 'r', encoding='utf-8') as f:
     print("\n")
     print("\n")
 
-    # finding the ten less populated countries
+    # finding the ten bottom populated countries
     pop_sorted_countries = sorted(country_data_lst, key=lambda country: country[1])
-    ten_less_pop = []
+    ten_bottom_pop = []
     counter = 0
     for country in pop_sorted_countries:
         if country.population > 0:
             counter += 1
-            ten_less_pop.append(country)
+            ten_bottom_pop.append(country)
         if counter == 10:
             break    
     
     print("ten less populated countries")
     print("----------------------------")
-    for country in ten_less_pop:
+    for country in ten_bottom_pop:
         print("{}, population: {}".format(country.name, country.population))
-
-
-
