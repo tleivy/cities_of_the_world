@@ -71,17 +71,17 @@ def increment_country_properties(country_list, source_city, country_index):
     country_list[country_index] = country_list[country_index]._replace(city_counter=temp_cit)
 
 
-def check_country_in_list(country_list, target):  #check about enumerate function
+def check_country_in_list(country_list, target):
     """
     this function checks if the target country is in the country data list
     :param country_list: a country data list
     :param target: the target country
-    :return: true if the country is in the list (and also it's index), false otherwise
+    :return: the country's index in the list or -1 if it's not in the list
     """
     for index, country in enumerate(country_list):
         if country[0] == target:
-            return True, index
-        return False, -1
+            return index
+    return -1
 
 
 def update_country_in_list(country_list, city):
@@ -93,24 +93,18 @@ def update_country_in_list(country_list, city):
     :param city:
     :return:
     """
-    in_list = False
-    c_index = 0  # country index
-    for country in country_list:
-        if country[0] == city.country:
-            in_list = True
-            break
-        c_index += 1
+    country_index = check_country_in_list(country_list, city.country)
 
-    if not in_list:
+    if country_index == -1:
         country = new_country(city)  # creating a new country tuple for the city's country
         country_list.append(country)
     else:
-        increment_country_properties(country_list, city, c_index)
+        increment_country_properties(country_list, city, country_index)
 
 
 def read_file(file_name, city_list, country_list):
     """
-    this function reads a given file,
+    this function reads a given file and creates a list of the cities a countries
     :param file_name:
     :param city_list:
     :param country_list:
@@ -183,7 +177,8 @@ Country = namedtuple('Country', 'name population city_counter')
 cities = []
 country_data_lst = []
 
-read_file('cities_of_the_world.csv', cities, country_data_lst)
-print_country_cities_num()
-ten_most_populated_cities()
-ten_bottom_populated_countries()
+if __name__ == '__main__':
+    read_file('cities_of_the_world.csv', cities, country_data_lst)
+    print_country_cities_num()
+    ten_most_populated_cities()
+    ten_bottom_populated_countries()
