@@ -71,6 +71,19 @@ def increment_country_properties(country_list, source_city, country_index):
     country_list[country_index] = country_list[country_index]._replace(city_counter=temp_cit)
 
 
+def check_country_in_list(country_list, target):  #check about enumerate function
+    """
+    this function checks if the target country is in the country data list
+    :param country_list: a country data list
+    :param target: the target country
+    :return: true if the country is in the list (and also it's index), false otherwise
+    """
+    for index, country in enumerate(country_list):
+        if country[0] == target:
+            return True, index
+        return False, -1
+
+
 def update_country_in_list(country_list, city):
     """
     this function checks if the current city's country is already in the list.
