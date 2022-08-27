@@ -66,7 +66,7 @@ def increment_country_properties(country_list, source_city, country_index):
     """
     temp_pop = country_list[country_index][1] + source_city[2]  # adding city population to country total
     temp_cit = country_list[country_index][2] + 1  # incrementing country's city counter
-   
+
     country_list[country_index] = country_list[country_index]._replace(population=temp_pop)
     country_list[country_index] = country_list[country_index]._replace(city_counter=temp_cit)
 
