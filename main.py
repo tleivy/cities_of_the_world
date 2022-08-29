@@ -1,5 +1,7 @@
 from collections import namedtuple
 
+FILENAME = 'cities_of_the_world.csv'
+
 
 def format_line_split(raw_line):
     """
@@ -92,9 +94,9 @@ def update_country_dict(country_dict, city):
 def read_file(file_name, city_list, country_dict):
     """
     this function reads a given file and creates a list of the cities a countries
-    :param file_name:
-    :param city_list:
-    :param country_dict:
+    :param file_name: the file we want to read
+    :param city_list: a list containing city data tuples
+    :param country_dict: a dictionary containing country data tuples
     :return:
     """
     with open(file_name, 'r', encoding='utf-8') as f:
@@ -165,7 +167,7 @@ cities = []  # a list of city tuples
 country_data = {}  # a dictionary of country tuples
 
 if __name__ == '__main__':
-    read_file('cities_of_the_world.csv', cities, country_data)
+    read_file(FILENAME, cities, country_data)
     print_country_cities_num()
     ten_most_populated_cities()
     ten_bottom_populated_countries()
