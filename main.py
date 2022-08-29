@@ -54,60 +54,47 @@ def new_country(city_tuple):
     return Country(name=city_tuple.country, population=city_tuple.population, city_counter=1)
 
 
-def increment_country_properties(country_list, source_city, country_index):
+def increment_country_properties(country_dict, source_city, key):
     """
     this function updates a country namedtuple properties:
     it adds the source city's population to the country's population
     it adds 1 to the country's city counter
-    :param country_list: a list of countries and their data
+    then creates a new country tuple and updates the dictionary
+    :param country_dict: a dictionary of all countries and their data
     :param source_city:
-    :param country_index: the country's index in the list
+    :param key: the country's name
     :return:
     """
-    temp_pop = country_list[country_index][1] + source_city[2]  # adding city population to country total
-    temp_cit = country_list[country_index][2] + 1  # incrementing country's city counter
+    temp_pop = country_dict[key][1] + source_city[2]  # adding city population to country total
+    city_count = country_dict[key][2] + 1  # incrementing country's city counter
 
-    country_list[country_index] = country_list[country_index]._replace(population=temp_pop)
-    country_list[country_index] = country_list[country_index]._replace(city_counter=temp_cit)
+    new_tuple = Country(name=key, population=temp_pop, city_counter=city_count)
+    country_dict[key] = new_tuple
 
 
-def check_country_in_list(country_list, target):
+def update_country_dict(country_dict, city):
     """
-    this function checks if the target country is in the country data list
-    :param country_list: a country data list
-    :param target: the target country
-    :return: the country's index in the list or -1 if it's not in the list
-    """
-    for index, country in enumerate(country_list):
-        if country[0] == target:
-            return index
-    return -1
-
-
-def update_country_in_list(country_list, city):
-    """
-    this function checks if the current city's country is already in the list.
-    if it isn't then it creates a new country tuple and adds it to the list.
-    if it is, updated the population and city counter fields of the country
-    :param country_list:
-    :param city:
+    this function checks if the country is in the country data dictionary
+    if it isn't it creates a new country tuple and adds it to the dictionary
+    if it is it updates the matching country data
+    :param country_dict: a dictionary containing country data tuples
+    :param city: a tuple containing city data
     :return:
     """
-    country_index = check_country_in_list(country_list, city.country)
-
-    if country_index == -1:
-        country = new_country(city)  # creating a new country tuple for the city's country
-        country_list.append(country)
+    key = city.country
+    if key not in country_dict.keys():
+        country_tuple = new_country(city)
+        country_dict[key] = country_tuple
     else:
-        increment_country_properties(country_list, city, country_index)
+        increment_country_properties(country_dict, city, key)
 
 
-def read_file(file_name, city_list, country_list):
+def read_file(file_name, city_list, country_dict):
     """
     this function reads a given file and creates a list of the cities a countries
     :param file_name:
     :param city_list:
-    :param country_list:
+    :param country_dict:
     :return:
     """
     with open(file_name, 'r', encoding='utf-8') as f:
@@ -118,7 +105,7 @@ def read_file(file_name, city_list, country_list):
             line = format_line_split(raw_line)  # cleaning the raw input
             curr = new_city(line)
             city_list.append(curr)
-            update_country_in_list(country_list, curr)
+            update_country_dict(country_dict, curr)
 
             raw_line = f.readline()  # reading the next line of data
 
@@ -128,12 +115,12 @@ def print_country_cities_num():
     this function prints countries (alpha sorted) and number of cities
     :return:
     """
-    countries_alpha_sorted = sorted(country_data_lst, key=lambda country: country[0])
+    countries_alpha_sorted = sorted(country_data.items(), key=lambda country: country[0])
     print("")
     print("countries and number of cities")
     print("------------------------------")
     for country in countries_alpha_sorted:
-        print("{}, num of cities: {}".format(country.name, country.city_counter))
+        print("{}, num of cities: {}".format(country[1][0], country[1][2]))
     print("\n")
 
 
@@ -156,11 +143,11 @@ def ten_bottom_populated_countries():
     this function finds and prints the 10 bottom populated countries
     :return:
     """
-    pop_sorted_countries = sorted(country_data_lst, key=lambda country: country[1])
+    pop_sorted_countries = sorted(country_data.items(), key=lambda country: country[1][1])
     ten_bottom_pop = []
     counter = 0
     for country in pop_sorted_countries:
-        if country.population > 0:
+        if country[1][1] > 0:
             counter += 1
             ten_bottom_pop.append(country)
         if counter == 10:
@@ -168,17 +155,17 @@ def ten_bottom_populated_countries():
     print("ten bottom populated countries")
     print("----------------------------")
     for country in ten_bottom_pop:
-        print("{} - population: {}".format(country.name, country.population))
+        print("{} - population: {}".format(country[1][0], country[1][1]))
 
 
 # creating namedtuple type - City, Country
 City = namedtuple('City', 'name country population')
 Country = namedtuple('Country', 'name population city_counter')
-cities = []
-country_data_lst = []
+cities = []  # a list of city tuples
+country_data = {}  # a dictionary of country tuples
 
 if __name__ == '__main__':
-    read_file('cities_of_the_world.csv', cities, country_data_lst)
+    read_file('cities_of_the_world.csv', cities, country_data)
     print_country_cities_num()
     ten_most_populated_cities()
     ten_bottom_populated_countries()
